@@ -1,0 +1,22 @@
+#login{
+    position: relative;
+    top: 230px;
+    left: 300px;
+}
+h2{
+    color: red;
+}
+#header{
+    background-color: green;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+#footer{
+     background-color: green;
+     padding-top: 20px;
+     padding-bottom: 20px;
+}
+#mid{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
