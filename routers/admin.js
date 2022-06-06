@@ -45,6 +45,11 @@ router.get('/logout',(req,res)=>{
     res.redirect('/admin/')
 })
 
+
+ router.get('/banner',(req,res)=>{
+     res.render('')
+ })
+
               
  
 // test url
@@ -65,5 +70,4 @@ router.get('/test',async(req,res)=>{
 
 
 module.exports=router;
-
 

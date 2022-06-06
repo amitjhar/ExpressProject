@@ -11,15 +11,8 @@
 </head>
 <body>
       <!-- header  -->
-      <section id="header">
-        <div class="contaniner">
-            <div class="row">
-                <div class="col-md-4"><h2>Welcome to Admin</h2></div>
-                <div class="col-md-7 text-end"><a href="/admin/logout"> logout</a></div>
-            </div>
-        </div>
-      </section>
-
+      
+<%- include('../../partials/admin/header.ejs')%>
       <!-- middle  -->
       <section id="mid">
           <div class="container">
@@ -32,13 +25,7 @@
       </section>
 
       <!-- footer  -->
-
-      <section id="footer">
-          <div class="container">
-              <div class="row">
-
-              </div>
-          </div>
-      </section>
+      <%- include('../../partials/admin/footer.ejs')%>
+     
 </body>
 </html>
