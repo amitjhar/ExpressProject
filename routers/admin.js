@@ -1,5 +1,6 @@
 const router = require('express').Router() //module
 const Admin = require('../models/admintable')
+ const Banner = require('../models/headerTable')
 
 
 router.get('/',(req,res)=>{
@@ -46,8 +47,25 @@ router.get('/logout',(req,res)=>{
 })
 
 
- router.get('/banner',(req,res)=>{
-     res.render('')
+ router.get('/banner',async(req,res)=>{
+
+    const bannerRecord = await Banner.findOne()
+     res.render('admin/banner.ejs',{bannerRecord:bannerRecord})
+ })
+
+ router.get("/bannerupdate/:id",async(req,res)=>{
+    const id = req.params.id;
+    const bannerRecord = await Banner.findById(id)
+    // console.log(bannerRecord)
+    res.render('admin/bannerUpdateForm.ejs',{bannerRecord:bannerRecord})
+ })
+
+ router.post('/bannerupdaterecord/:id',async(req,res)=>{
+    const {title,shortDes,longDes}= req.body;
+    const id = req.params.id
+    const bannerRecord = await Banner.findByIdAndUpdate(id,{title:title,shortDes:shortDes,longDes:longDes})
+    res.redirect('/admin/banner')
+    
  })
 
               
