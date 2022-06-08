@@ -1,5 +1,6 @@
 const router = require('express').Router() // module
 const Header = require('../models/headerTable')
+const Query = require('../models/query')
 
 
 
@@ -15,6 +16,14 @@ router.get('/banner',async(req,res)=>{
     const headerRecord = await Header.findOne()
     res.render('banner.ejs',{headerRecord:headerRecord})
 }) 
+
+router.post('/query',async(req,res)=>{
+    const {query,email}=req.body;
+    const status = 'unread'
+   const queryRecord= new Query({query:query,email:email,status:status})
+   await queryRecord.save();
+   res.redirect('/')
+})
 
 
 router.get('/test', async(req,res)=>{
