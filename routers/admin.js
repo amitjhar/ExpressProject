@@ -3,6 +3,7 @@ const router = require("express").Router(); //module
 const Admin = require("../models/admintable");
 const Banner = require("../models/headerTable");
 const Query = require("../models/query");
+const Contact = require('../models/contact');
 const multer = require('multer'); // img module
 
 router.get("/", (req, res) => {
@@ -67,6 +68,12 @@ router.post("/bannerupdaterecord/:id", async (req, res) => {
   });
   res.redirect("/admin/banner");
 });
+
+// router.get('/contact',async(req,res)=>{
+//     const contactRecord = await Contact.find();
+//     console.log(contactRecord);
+//     res.render('admin/contact.ejs',{contactRecord})
+// })
 
 
 router.get("/queryupdate/:id", async (req, res) => {
@@ -138,7 +145,7 @@ router.get('/image',(req,res)=>{
 })
 
 router.post('/img',upload.single('img'),(req,res)=>{
-    console.log(req.file);
+    console.log(req.file.fieldname);
 
 })
 
