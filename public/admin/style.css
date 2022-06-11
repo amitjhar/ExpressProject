@@ -28,7 +28,8 @@ table  th{
     text-align: center;
 }
 table td{
-    font-size: 10px;
+    font-size: 15px;
+    text-align: center;
 }
 table i{
     font-size: 20px;
@@ -45,4 +46,8 @@ table i{
     
     /* display: inline-block; */
     color: white;
+}
+
+img{
+    width: 100px;
 }

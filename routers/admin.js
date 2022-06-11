@@ -5,6 +5,25 @@ const Banner = require("../models/headerTable");
 const Query = require("../models/query");
 const Contact = require('../models/contact');
 const multer = require('multer'); // img module
+const Userreg = require("../models/userreg");
+
+
+
+    
+const storage = multer.diskStorage({
+  destination:function(req,file,callback){
+      callback(null,'./public/upload');
+  },
+  filename :function(req,file,callback){
+      callback(null,Date.now()+ file.originalname);
+  }
+});
+
+const upload = multer({
+  storage:storage,
+  // limits:{fileSize:1024*1024*4} //4MB
+})
+
 
 router.get("/", (req, res) => {
   // res.send('welcome to my admin page')
@@ -58,14 +77,18 @@ router.get("/bannerupdate/:id", async (req, res) => {
   res.render("admin/bannerUpdateForm.ejs", { bannerRecord: bannerRecord });
 });
 
-router.post("/bannerupdaterecord/:id", async (req, res) => {
+router.post("/bannerupdaterecord/:id",upload.single('img'), async (req, res) => {
   const { title, shortDes, longDes } = req.body;
+if(  req.file){
+  const imageName = req.file.filename;
   const id = req.params.id;
-  const bannerRecord = await Banner.findByIdAndUpdate(id, {
-    title: title,
-    shortDes: shortDes,
-    longDes: longDes,
-  });
+  const bannerRecord = await Banner.findByIdAndUpdate(id, {title: title,shortDes: shortDes,longDes: longDes,image:imageName });
+}else{
+
+  const id = req.params.id;
+  const bannerRecord = await Banner.findByIdAndUpdate(id, {title: title,shortDes: shortDes,longDes: longDes });
+
+}
   res.redirect("/admin/banner");
 });
 
@@ -111,24 +134,29 @@ router.post("/querysearch", async (req, res) => {
 
 });
 
-    // image uplod setup code start 
+      // user managment 
 
-    
-const storage = multer.diskStorage({
-    destination:function(req,file,callback){
-        callback(null,'./public/upload');
-    },
-    filename :function(req,file,callback){
-        callback(null,Date.now()+ file.originalname);
-    }
-});
+        router.get('/userlogin',async (req,res)=>{
+          const userRecords = await Userreg.find();
+         res.render('admin/userreg.ejs',{userRecords})
+         console.log(userRecords);
+          
+        });
 
-const upload = multer({
-    storage:storage,
-    // limits:{fileSize:1024*1024*4} //4MB
-})
-      
-        //  setup code end 
+        router.get('/userstatusupdate/:id',async (req,res)=>{
+          const id = req.params.id;
+        const user = await Userreg.findById(id)
+        if(user.status === "inactive"){
+          await Userreg.findByIdAndUpdate(id, {status: 'active'})
+        }
+        else {
+          await Userreg.findByIdAndUpdate(id, {status: 'inactive'})
+        }
+        
+        res.redirect('/admin/userlogin')
+
+        })
+
 
 
 // test url
@@ -139,6 +167,8 @@ router.get("/test", async (req, res) => {
   const adminRecord = new Admin({ username: user, password: pass });
   await adminRecord.save();
 });
+
+// for image router 
 
 router.get('/image',(req,res)=>{
     res.render('admin/image.ejs')

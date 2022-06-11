@@ -1,7 +1,7 @@
 const express = require('express')  //function 
 
 const app = express() //module
-app.use(express.urlencoded({extended:false}))
+app.use(express.urlencoded({extended:false}))    //body parser
 const adminRouter = require('./routers/admin');
 const frontendRouter = require('./routers/frontend');
 const mongoose = require('mongoose'); // module

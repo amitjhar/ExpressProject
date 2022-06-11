@@ -21,13 +21,15 @@
                   <h2>Update page</h2>
                   <%- include('../../partials/admin/left.ejs')%>
                   <div class="col-md-9">
-                      <form action="/admin/bannerupdaterecord/<%= bannerRecord.id%>" method="post">
+                      <form action="/admin/bannerupdaterecord/<%= bannerRecord.id%>" method="post" enctype="multipart/form-data">
                           <label for="" class="form-label">Title</label>
                           <input type="text" name="title" id="" class="form-control" value="<%= bannerRecord.title%>">
                           <label for="" class="form-label">shortDes</label>
                           <textarea name="shortDes" class="form-control"><%= bannerRecord.shortDes%></textarea>
                           <label for="" class="form-label">longDes</label>
                           <textarea name="longDes" class="form-control mb-3" ><%= bannerRecord.longDes%></textarea>
+                          <div><img src="/upload/<%= bannerRecord.image%>" alt=""></div>
+                          <input type="file" name="img" id="" class="form-control mb-3">
                           <button type="submit" class="form-control btn btn-success">Update</button>
                       </form>
                   </div>
