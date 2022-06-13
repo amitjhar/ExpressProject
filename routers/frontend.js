@@ -3,7 +3,6 @@ const Header = require("../models/headerTable");
 const Query = require("../models/query");
 const Userreg = require("../models/userreg");
 
-
 router.get("/", async (req, res) => {
   const headerRecord = await Header.findOne();
   // console.log(headerRecord);
@@ -51,12 +50,16 @@ router.post("/loginfront", async (req, res) => {
   const userExist = await Userreg.findOne({ username });
   if (userExist) {
     if (userExist.password === password) {
-      res.redirect("/");
+      if (userExist.status === "active") {
+        res.redirect("/");
+      } else {
+        res.redirect("/login");
+      }
     } else {
       alert("incorrect password, plz try again");
       res.redirect("/login");
     }
-  }else{
+  } else {
     alert("user does not exist");
     res.redirect("/login");
   }
@@ -76,7 +79,12 @@ router.post("/regfront", async (req, res) => {
     alert("User Already Exists !!");
     res.redirect("/reg");
   } else {
-    const userRecord = new Userreg({ username: username, password: password,status:'inactive' });
+    const userRecord = new Userreg({
+      username: username,
+      password: password,
+      status: "inactive",
+      role:'publuc'
+    });
     userRecord.save();
     res.redirect("/login");
   }

@@ -33,6 +33,7 @@
               <tr>
                 <th>username</th>
                 <th>Status</th>
+                <th>Role</th>
               </tr>
               <%userRecords.forEach((res)=>{%>
 
@@ -47,6 +48,8 @@
                     <% }%></a
                   >
                 </td>
+                <td><a href="/admin/userrole/<%= res.id%>"<button class="btn btn-success"><%=res.role%></button>
+                  </a</td>
               </tr>
               <%})%>
             </table>

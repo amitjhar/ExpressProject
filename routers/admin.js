@@ -155,7 +155,21 @@ router.post("/querysearch", async (req, res) => {
         
         res.redirect('/admin/userlogin')
 
-        })
+        });
+
+        router.get('/userrole/:id',async(req,res)=>{
+          const id = req.params.id;
+          const user = await Userreg.findById(id)
+          if(user.role === "public"){
+            await Userreg.findByIdAndUpdate(id, {role: 'pvt'})
+          }
+          else {
+            await Userreg.findByIdAndUpdate(id, {role: 'public'})
+          }
+          
+          res.redirect('/admin/userlogin')
+
+        });
 
 
 
