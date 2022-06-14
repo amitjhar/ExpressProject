@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="/admin/style.css">
+</head>
+<body>
+      <!-- header  -->
+      
+<%- include('../../partials/admin/header.ejs')%>
+      <!-- middle  -->
+      <section id="mid">
+          <div class="container">
+              <div class="row">
+                  <%- include('../../partials/admin/left.ejs')%>
+                  
+                  <div class="col-md-9">
+                    <form action="/admin/parkingdata" method="post">
+                        <label for="" class="form-label">vehile no</label>
+                        <input type="text" name="vno" id="" class="form-control mb-3" required>
+                        <select name="vtype" id="" class="form-control" required >
+                            <option selected disabled value="">Select vehicle Type</option>
+                            <option value="Two Whealer">Two Whealer</option>
+                            <option value="Three Whealer">Three Whealer</option>
+                            <option value="Four Whealer">Four Whealer</option>
+                        </select>
+                        <label for="" class="form-label">entry time</label>
+                        <input type="datetime-local" name="vin" id="" class="form-control mb-3" required>
+                        <button type="submit" class="btn btn-primary form-control">submit</button>
+
+                    </form>
+                  </div>
+
+              </div>
+          </div>
+      </section>
+
+      <!-- footer  -->
+      <%- include('../../partials/admin/footer.ejs')%>
+     
+</body>
+</html>

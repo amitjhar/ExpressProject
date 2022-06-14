@@ -3,6 +3,25 @@ const Header = require("../models/headerTable");
 const Query = require("../models/query");
 const Userreg = require("../models/userreg");
 
+let sess = null;
+
+function handlelogincheck(req,res,next){
+  if(req.session.isAuth){
+    next()
+
+  }else{
+    res.redirect('/login')
+  }
+}
+
+function handlerole(req,res,next){
+  if(sess.role =='pvt'){
+    next();
+  }else{
+    res.send('you do not have a rights')
+  }
+}
+
 router.get("/", async (req, res) => {
   const headerRecord = await Header.findOne();
   // console.log(headerRecord);
@@ -10,9 +29,9 @@ router.get("/", async (req, res) => {
   res.render("index.ejs", { headerRecord: headerRecord });
 });
 
-router.get("/banner", async (req, res) => {
+router.get("/banner",handlelogincheck, handlerole,async (req, res) => {
   const headerRecord = await Header.findOne();
-  res.render("banner.ejs", { headerRecord: headerRecord });
+  res.render("banner.ejs", { headerRecord: headerRecord ,username:sess.username});
 });
 
 router.post("/query", async (req, res) => {
@@ -51,16 +70,21 @@ router.post("/loginfront", async (req, res) => {
   if (userExist) {
     if (userExist.password === password) {
       if (userExist.status === "active") {
-        res.redirect("/");
+        req.session.isAuth = true;            //session 
+        sess = req.session;
+        sess.role = userExist.role;
+        sess.username=userExist.username
+        console.log(sess.role);
+        res.redirect("/banner");
       } else {
         res.redirect("/login");
       }
     } else {
-      alert("incorrect password, plz try again");
+      // alert("incorrect password, plz try again");
       res.redirect("/login");
     }
   } else {
-    alert("user does not exist");
+    // alert("user does not exist");
     res.redirect("/login");
   }
 });

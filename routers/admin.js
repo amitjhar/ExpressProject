@@ -3,27 +3,24 @@ const router = require("express").Router(); //module
 const Admin = require("../models/admintable");
 const Banner = require("../models/headerTable");
 const Query = require("../models/query");
-const Contact = require('../models/contact');
-const multer = require('multer'); // img module
+const Contact = require("../models/contact");
+const multer = require("multer"); // img module
 const Userreg = require("../models/userreg");
+const Parking = require("../models/parking");
 
-
-
-    
 const storage = multer.diskStorage({
-  destination:function(req,file,callback){
-      callback(null,'./public/upload');
+  destination: function (req, file, callback) {
+    callback(null, "./public/upload");
   },
-  filename :function(req,file,callback){
-      callback(null,Date.now()+ file.originalname);
-  }
+  filename: function (req, file, callback) {
+    callback(null, Date.now() + file.originalname);
+  },
 });
 
 const upload = multer({
-  storage:storage,
+  storage: storage,
   // limits:{fileSize:1024*1024*4} //4MB
-})
-
+});
 
 router.get("/", (req, res) => {
   // res.send('welcome to my admin page')
@@ -77,20 +74,31 @@ router.get("/bannerupdate/:id", async (req, res) => {
   res.render("admin/bannerUpdateForm.ejs", { bannerRecord: bannerRecord });
 });
 
-router.post("/bannerupdaterecord/:id",upload.single('img'), async (req, res) => {
-  const { title, shortDes, longDes } = req.body;
-if(  req.file){
-  const imageName = req.file.filename;
-  const id = req.params.id;
-  const bannerRecord = await Banner.findByIdAndUpdate(id, {title: title,shortDes: shortDes,longDes: longDes,image:imageName });
-}else{
-
-  const id = req.params.id;
-  const bannerRecord = await Banner.findByIdAndUpdate(id, {title: title,shortDes: shortDes,longDes: longDes });
-
-}
-  res.redirect("/admin/banner");
-});
+router.post(
+  "/bannerupdaterecord/:id",
+  upload.single("img"),
+  async (req, res) => {
+    const { title, shortDes, longDes } = req.body;
+    if (req.file) {
+      const imageName = req.file.filename;
+      const id = req.params.id;
+      const bannerRecord = await Banner.findByIdAndUpdate(id, {
+        title: title,
+        shortDes: shortDes,
+        longDes: longDes,
+        image: imageName,
+      });
+    } else {
+      const id = req.params.id;
+      const bannerRecord = await Banner.findByIdAndUpdate(id, {
+        title: title,
+        shortDes: shortDes,
+        longDes: longDes,
+      });
+    }
+    res.redirect("/admin/banner");
+  }
+);
 
 // router.get('/contact',async(req,res)=>{
 //     const contactRecord = await Contact.find();
@@ -98,9 +106,8 @@ if(  req.file){
 //     res.render('admin/contact.ejs',{contactRecord})
 // })
 
-
 router.get("/queryupdate/:id", async (req, res) => {
-    const id = req.params.id;
+  const id = req.params.id;
   const queryRecord = await Query.findById(id);
   //  console.log(queryRecord)
   let a = null;
@@ -119,59 +126,49 @@ router.get("/querydelete/:id", async (req, res) => {
   res.redirect("/admin/query");
 });
 
-
 router.get("/query", async (req, res) => {
   const queryRecord = await Query.find();
   console.log(queryRecord);
   res.render("admin/query.ejs", { queryRecord });
 });
 
-
 router.post("/querysearch", async (req, res) => {
   const { search } = req.body;
   const queryRecord = await Query.find({ status: search });
   res.render("admin/query.ejs", { queryRecord });
-
 });
 
-      // user managment 
+// user managment
 
-        router.get('/userlogin',async (req,res)=>{
-          const userRecords = await Userreg.find();
-         res.render('admin/userreg.ejs',{userRecords})
-         console.log(userRecords);
-          
-        });
+router.get("/userlogin", async (req, res) => {
+  const userRecords = await Userreg.find();
+  res.render("admin/userreg.ejs", { userRecords });
+  console.log(userRecords);
+});
 
-        router.get('/userstatusupdate/:id',async (req,res)=>{
-          const id = req.params.id;
-        const user = await Userreg.findById(id)
-        if(user.status === "inactive"){
-          await Userreg.findByIdAndUpdate(id, {status: 'active'})
-        }
-        else {
-          await Userreg.findByIdAndUpdate(id, {status: 'inactive'})
-        }
-        
-        res.redirect('/admin/userlogin')
+router.get("/userstatusupdate/:id", async (req, res) => {
+  const id = req.params.id;
+  const user = await Userreg.findById(id);
+  if (user.status === "inactive") {
+    await Userreg.findByIdAndUpdate(id, { status: "active" });
+  } else {
+    await Userreg.findByIdAndUpdate(id, { status: "inactive" });
+  }
 
-        });
+  res.redirect("/admin/userlogin");
+});
 
-        router.get('/userrole/:id',async(req,res)=>{
-          const id = req.params.id;
-          const user = await Userreg.findById(id)
-          if(user.role === "public"){
-            await Userreg.findByIdAndUpdate(id, {role: 'pvt'})
-          }
-          else {
-            await Userreg.findByIdAndUpdate(id, {role: 'public'})
-          }
-          
-          res.redirect('/admin/userlogin')
+router.get("/userrole/:id", async (req, res) => {
+  const id = req.params.id;
+  const user = await Userreg.findById(id);
+  if (user.role === "public") {
+    await Userreg.findByIdAndUpdate(id, { role: "pvt" });
+  } else {
+    await Userreg.findByIdAndUpdate(id, { role: "public" });
+  }
 
-        });
-
-
+  res.redirect("/admin/userlogin");
+});
 
 // test url
 router.get("/test", async (req, res) => {
@@ -182,15 +179,59 @@ router.get("/test", async (req, res) => {
   await adminRecord.save();
 });
 
-// for image router 
+// for image router
 
-router.get('/image',(req,res)=>{
-    res.render('admin/image.ejs')
+router.get("/image", (req, res) => {
+  res.render("admin/image.ejs");
+});
+
+router.post("/img", upload.single("img"), (req, res) => {
+  console.log(req.file.fieldname);
+});
+
+router.get("/parkingform", (req, res) => {
+
+  res.render("admin/parkingform.ejs");
+});
+
+router.post("/parkingdata", async(req,res) => {
+  const {vno,vtype,vin} = req.body;
+  const amount = 0;
+  const parkingRecord = new Parking({vno,vtype,vin,amount})
+  await parkingRecord.save()
+  res.redirect("/admin/parkingfetch")
 })
 
-router.post('/img',upload.single('img'),(req,res)=>{
-    console.log(req.file.fieldname);
+router.get("/parkingfetch", async(req, res) => {
+const parkingRecord = await Parking.find()
+  res.render("admin/parkingdata.ejs",{parkingRecord});
+});
 
+router.get("/parkingdelete/:id", async (req, res) => {
+  const id =req.params.id;
+  await Parking.findByIdAndDelete(id)
+  res.redirect('/admin/parkingfetch')
+})
+
+router.get('/parkingout/:id',async(req,res)=>{
+  const id =req.params.id;
+  const parkingRecord = await Parking.findById(id);
+  var amount = 0;
+  const vout = new Date();
+  const hours = Math.abs(parkingRecord.vin - vout) / 36e5;
+
+  if(parkingRecord.vtype == "Two Whealer"){
+     amount = hours*10;
+  }
+  else if(parkingRecord.vtype == "Three Whealer"){
+    amount = hours*50;
+  }
+  else {
+    amount = hours*100;
+  }
+
+  await Parking.findByIdAndUpdate(id, {amount: Math.round(amount), vout});
+  res.redirect('/admin/parkingfetch')
 })
 
 module.exports = router;
