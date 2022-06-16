@@ -234,4 +234,11 @@ router.get('/parkingout/:id',async(req,res)=>{
   res.redirect('/admin/parkingfetch')
 })
 
+
+router.get('/waytoprint/:id',async(req,res)=>{
+  const id = req.params.id;
+  const parkingRecord = await Parking.findById(id)
+  res.render('admin/printpage.ejs',{parkingRecord})
+})
+
 module.exports = router;

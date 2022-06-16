@@ -8,8 +8,8 @@ h2{
 }
 #header{
     background-color: green;
-    padding-top: 20px;
-    padding-bottom: 20px;
+    /* padding-top: 20px;
+    padding-bottom: 20px; */
 }
 #footer{
      background-color: green;

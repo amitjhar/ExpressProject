@@ -25,13 +25,23 @@ function handlerole(req,res,next){
 router.get("/", async (req, res) => {
   const headerRecord = await Header.findOne();
   // console.log(headerRecord);
+  if(sess !== null){
+  res.render("index.ejs", { headerRecord: headerRecord,username:sess.username});
 
-  res.render("index.ejs", { headerRecord: headerRecord });
+  }else{
+
+  res.render("index.ejs", { headerRecord: headerRecord,username:'hello' });
+  }
 });
 
 router.get("/banner",handlelogincheck, handlerole,async (req, res) => {
   const headerRecord = await Header.findOne();
+  if(sess !== null){
   res.render("banner.ejs", { headerRecord: headerRecord ,username:sess.username});
+
+  }else{
+  res.render("banner.ejs", { headerRecord: headerRecord ,username:'hello'});
+  }
 });
 
 router.post("/query", async (req, res) => {
@@ -59,7 +69,11 @@ router.get("/test", async (req, res) => {
 });
 
 router.get("/login", (req, res) => {
-  res.render("loginfront.ejs");
+  if(sess !==null){
+  res.render("loginfront.ejs",{username:sess.username});
+  }else{
+  res.render("loginfront.ejs",{username:'hello'});
+  }
 });
 
 router.post("/loginfront", async (req, res) => {
@@ -88,6 +102,12 @@ router.post("/loginfront", async (req, res) => {
     res.redirect("/login");
   }
 });
+
+router.get('/logout',(req,res)=>{
+  req.session.destroy(); 
+  sess.username = null;
+  res.redirect('/login')
+})
 
 router.get("/reg", (req, res) => {
   res.render("regfront.ejs");
